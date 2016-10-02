@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-
+import hashlib
 
 #this is a constructor call
 #creating an instance of a class
@@ -28,9 +28,19 @@ def helloWorld():
 def authenticate():
     username = "arthur"
     password = "read"
+    
+    passHash = hashlib.sha1()
+    passHash.update(password)
+    hashedPassword = passHash.hexdigest()
+    
     inputtedUser = request.form['username']
     inputtedPass = request.form['password']
-    if username == inputtedUser and password == inputtedPass:
+
+    inputHash = hashlib.sha1()
+    inputHash.update(inputtedPass)
+    hashedInput = inputHash.hexdigest()
+
+    if username == inputtedUser and hashedPassword == hashedInput:
         my_title = "Success!"
         my_text = "Logged in!!! Yessss"
     else:
