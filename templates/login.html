@@ -2,16 +2,19 @@
 <html>
   
   <head>
-    <title>Login</title>
+    <title>{{ title }}</title>
   </head>
 
   <body>
-    Log in, if you please. <br>
+    {{ text }}<br>
     <form action="/auth" method="POST">
        Username: <input type="text" name="username"><br>
-      Password: <input type="text" name="password"><br>
+      Password: <input type="password" name="password"><br>
       <input type="submit">
     </form>
+    <br><br>
+    Don't have an account? <a href="/signup">Sign up here</a>.
+
   </body>
 
 </html>
