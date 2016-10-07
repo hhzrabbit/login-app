@@ -1,12 +1,21 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect, url_for
 import hashlib
+import os
 
-app = Flask(__name__) 
+app = Flask(__name__)
+app.secret_key = os.urandom(32)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if "user" in session.keys():
+        return redirect(url_for("welcome"))
+    else:
+        return redirect(url_for("login"))
 
+@app.route("/welcome")
+def welcome():
+    return render_template("welcome.html")
+    
 @app.route("/login")
 def login():
     return render_template("login.html", title = "Log in", text = "Log in, if you please.")
@@ -25,11 +34,14 @@ def authenticate():
         my_text = "Username not recognized. Please go back and try again, or register a new account."
     else:
         if hashPW(passwd) == dictOfUsers[user]:
-            my_title = "Success!"
-            my_text = "Logged in!!! Yessss"
-        else:
-            my_title = "Failure!"
-            my_text = "Authentification failed. Incorrect password. Please try again."
+            session["user"] = user
+            print session
+            return redirect(url_for("index"))
+            #my_title = "Success!"
+            #my_text = "Logged in!!! Yessss"
+            
+    my_title = "Failure!"
+    my_text = "Authentification failed. Incorrect password. Please try again."
             
     return render_template("output.html", title = my_title, text = my_text)
 
@@ -55,6 +67,11 @@ def register():
             my_text = "Account created! Please log in"
             my_template = "login.html"
     return render_template(my_template, title = my_title, text = my_text)
+
+@app.route("/logout")
+def logout():
+    session.pop("user")
+    return redirect(url_for("index"))
 
 def getDictOfUsers():
     d = {}
