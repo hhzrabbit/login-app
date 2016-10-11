@@ -39,9 +39,9 @@ def authenticate():
             return redirect(url_for("index"))
             #my_title = "Success!"
             #my_text = "Logged in!!! Yessss"
-    else:
-        my_title = "Failure!"
-        my_text = "Authentification failed. Incorrect password. Please try again."
+        else:
+            my_title = "Failure!"
+            my_text = "Authentification failed. Incorrect password. Please try again."
             
     return render_template("output.html", title = my_title, text = my_text)
 
